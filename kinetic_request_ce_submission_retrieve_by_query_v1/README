@@ -1,0 +1,65 @@
+== Kinetic Core Submission Retrieve by Query
+Searches a form's submissions and returns the submission details.
+
+=== Parameters
+[SpaceSlug]
+  The Space slug to be searched. If this value is not entered, the
+  Space slug will default to the one configured in info values.
+[Kapp Slug]
+  The slug of the Kapp being searched.
+[Form Slug]
+  The slug of the Form that is being searched.
+[Query]
+  The query that will be used to search the submissions. Ex: values[company]=Kinetic
+
+=== Results
+
+[ID]
+  ID of the submission that was entered.
+[Label]
+  Label of the submission.
+[Origin]
+  Originating ID. This is typically the ID of a different submission.
+[Parent]
+  Parent ID.
+[submittedAt]
+  Submitted Date/Time
+[type]
+
+[updatedAt]
+   Updated Date/Time
+[updatedBy]
+   User ID for Last Updated
+[closedAt]
+   Closed Date/Time
+[coreState]
+   Status: Draft, Submitted, or Closed
+[createdAt]
+   Created Date/Time
+[createdBy]
+   User ID that Created the submission
+[formDescription]
+   Form Description
+[formName]
+   Form Name
+[formNotes]
+   Form Notes
+[formSlug]
+   Form Slug
+[formStatus]
+   Form Status
+
+	   
+== Details
+
+Returns information about the submission found by the query given plus limit=1. 
+Note that the query should be specific enough to bring back just one value. If it
+is not, one will be selected by the system because of the limit=1 added onto the 
+search. The first one returned will be returned by the handler.
+
+Note that the query must be URI escaped. This can be done by using 
+URI.escape in the parameter. For example:
+<%=URI.escape("values[Notification Name]")%>=<%=URI.escape(@inputs['Email Template Name'])%>&value[Type]=Recipient
+In this example, the first field name must be escaped because of the space, and the variable should 
+because it is unknown what characters that may contain. We *don't* want to escape the & because we want that
+to act like a & on the URL and then the rest of the field and values don't contain anything we need to escape.

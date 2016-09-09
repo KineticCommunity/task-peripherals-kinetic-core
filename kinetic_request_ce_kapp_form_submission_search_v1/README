@@ -1,0 +1,43 @@
+== Kinetic Core Submission Search
+Searches a form's submissions and returns the submission object by its respective kapp_slug and form_slug.
+
+=== Parameters
+[SpaceSlug]
+  The Space slug to be searched. If this value is not entered, the
+  Space slug will default to the one configured in info values.
+[Kapp Slug]
+  The slug of the Kapp being searched.
+[Form Slug]
+  The slug of the Form that is being searched.
+[Query]
+  The query that will be used to search the submissions. Ex: values[company]=Kinetic
+[return_type]
+  File format of desired response.
+
+=== Results
+[Count]
+  The number of submissions that have been returned.
+[Submissions]
+  List of submissions that match the query (JSON).
+[XML]
+  List of submissions that match the query (XML).
+[idList]
+  XML list of ids of the returned submissions.
+     example:
+	   <ids>
+	      <id>f4cd6acf-e552-11e5-9c32-97bbc6bf7f84</id>
+	   </ids>
+
+== Details
+
+Returns information about the submissions found by the query given,
+the count, and XML list of the Ids (for looping through the submissions),
+jsons of the submissions, and an XML of the submission (in case you want
+to loop through something other than the id.
+
+Note that the query must be URI escaped. This can be done by using
+URI.escape in the parameter. For example:
+<%=URI.escape("values[Notification Name]")%>=<%=URI.escape(@inputs['Email Template Name'])%>&value[Type]=Recipient
+In this example, the first field name must be escaped because of the space, and the variable should
+because it is unknown what characters that may contain. We *don't* want to escape the & because we want that
+to act like a & on the URL and then the rest of the field and values don't contain anything we need to escape.

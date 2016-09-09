@@ -1,0 +1,19 @@
+<results>
+    <result name="ID">.+</result>
+    <result name="Label">.+</result>
+    <result name="Origin">.+</result>
+    <result name="Parent">.+</result>
+    <result name="Submitted At">.+</result>
+    <result name="Type">.+</result>
+    <result name="Updated At">.+</result>
+    <result name="Updated By">.+</result>
+    <result name="Closed At">.+</result>
+    <result name="Core State">.+</result>
+    <result name="Created At">.+</result>
+    <result name="Created By">.+</result>
+    <result name="Form Description">.+</result>
+    <result name="Form Name">.+</result>
+    <result name="Form Notes">.+</result>
+    <result name="Form Slug">.+</result>
+    <result name="Form Status">.+</result>
+</results>
