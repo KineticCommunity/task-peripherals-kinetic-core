@@ -98,3 +98,5 @@ if not defined?(RestClient.version)
 elsif RestClient.version.to_s != "1.6.7"
   raise "Incompatible library version #{RestClient.version} for rest-client.  Expecting version 1.6.7."
 end
+
+require 'uri'

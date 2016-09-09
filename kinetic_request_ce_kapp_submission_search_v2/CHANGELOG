@@ -1,0 +1,8 @@
+== Kinetic Core Submission Search V1 (2016-01-13)
+ * Initial version.  See README for details.
+
+== Kinetic Core Submission Search V2 (2016-09-08)
+ * Changed query parameter to use the q= parameter (see submission REST API
+ documentation for more specifics on the q parameter).
+ * The query parameter is now automatically URL encoded by the handler
+ * Added debug logging info value

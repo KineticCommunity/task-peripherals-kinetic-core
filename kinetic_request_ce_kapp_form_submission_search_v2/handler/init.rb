@@ -1,7 +1,7 @@
 # Require the dependencies file to load the vendor libraries
 require File.expand_path(File.join(File.dirname(__FILE__), "dependencies"))
 
-class KineticRequestCeKappFormSubmissionSearchV1
+class KineticRequestCeKappFormSubmissionSearchV2
   # Prepare for execution by building Hash objects for necessary values and
   # validating the present state.  This method sets the following instance
   # variables:
@@ -33,6 +33,8 @@ class KineticRequestCeKappFormSubmissionSearchV1
 
     @formatter = REXML::Formatters::Pretty.new
     @formatter.compact = true
+
+    @enable_debug_logging = @info_values['enable_debug_logging'] == 'Yes'
   end
 
   # The execute method gets called by the task engine when the handler's node is processed. It is
@@ -40,6 +42,8 @@ class KineticRequestCeKappFormSubmissionSearchV1
   # If it returns a result, it will be in a special XML format that the task engine expects. These
   # results will then be available to subsequent tasks in the process.
   def execute
+    raise "A space slug is required to be passed in either the Info Values or Parameters" if @parameters["space_slug"].empty? && @info_values["space_slug"].empty?
+
     api_username  = URI.encode(@info_values["api_username"])
     api_password  = @info_values["api_password"]
     api_server    = @info_values["api_server"]
@@ -48,7 +52,8 @@ class KineticRequestCeKappFormSubmissionSearchV1
     query         = @parameters["query"]
     space_slug    = @parameters["space_slug"].empty? ? @info_values["space_slug"] : @parameters["space_slug"]
 
-    api_route = "#{api_server}/#{space_slug}/app/api/v1/kapps/#{kapp_slug}/forms/#{form_slug}/submissions?#{query}"
+    api_route = "#{api_server}/#{space_slug}/app/api/v1/kapps/#{kapp_slug}/forms/#{form_slug}/submissions?"
+    api_route += "q=#{URI.escape(query)}" if !query.empty?
 
     puts "API ROUTE: #{api_route}"
 
@@ -81,7 +86,7 @@ class KineticRequestCeKappFormSubmissionSearchV1
     end
 
     rescue RestClient::Exception => error
-      raise StandardError, error
+      raise StandardError, error.inspect
   end
 
 

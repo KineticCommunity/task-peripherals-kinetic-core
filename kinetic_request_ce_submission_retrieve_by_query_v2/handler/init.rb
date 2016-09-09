@@ -1,7 +1,7 @@
 # Require the dependencies file to load the vendor libraries
 require File.expand_path(File.join(File.dirname(__FILE__), "dependencies"))
 
-class KineticRequestCeSubmissionRetrieveByQueryV1
+class KineticRequestCeSubmissionRetrieveByQueryV2
   # Prepare for execution by building Hash objects for necessary values and
   # validating the present state.  This method sets the following instance
   # variables:
@@ -30,6 +30,8 @@ class KineticRequestCeSubmissionRetrieveByQueryV1
     REXML::XPath.each(@input_document, "/handler/parameters/parameter") do |item|
       @parameters[item.attributes["name"]] = item.text.to_s.strip
     end
+
+    @enable_debug_logging = @info_values['enable_debug_logging'] == 'Yes'
   end
 
   # The execute method gets called by the task engine when the handler's node is processed. It is
@@ -37,6 +39,8 @@ class KineticRequestCeSubmissionRetrieveByQueryV1
   # If it returns a result, it will be in a special XML format that the task engine expects. These
   # results will then be available to subsequent tasks in the process.
   def execute
+    raise "A space slug is required to be passed in either the Info Values or Parameters" if @parameters["space_slug"].empty? && @info_values["space_slug"].empty?
+
     api_username  = URI.encode(@info_values["api_username"])
     api_password  = @info_values["api_password"]
     api_server    = @info_values["api_server"]
@@ -46,9 +50,10 @@ class KineticRequestCeSubmissionRetrieveByQueryV1
     query         = @parameters["query"]
 
     api_route = "#{api_server}/#{space_slug}/app/api/v1/kapps/#{kapp_slug}/forms/#{form_slug}/submissions" +
-                "?include=details,origin,parent,children,descendents,form,type&limit=1&#{query}"
+                "?include=details,origin,parent,children,descendents,form,type&limit=1"
+    api_route += "&q=#{URI.escape(query)}" if !query.empty?
 
-    puts "API ROUTE: #{api_route}"
+    puts "API ROUTE: #{api_route}" if @enable_debug_logging
 
     resource = RestClient::Resource.new(api_route, { :user => api_username, :password => api_password })
 
@@ -80,10 +85,10 @@ class KineticRequestCeSubmissionRetrieveByQueryV1
     else
 
       allresults = JSON.parse(response)["submissions"]
-      puts "Full RESULTS: #{allresults.inspect}"
+      puts "Full RESULTS: #{allresults.inspect}" if @enable_debug_logging
       results = allresults[0]
       
-      puts "RESULTS: #{results.inspect}"
+      puts "RESULTS: #{results.inspect}" if @enable_debug_logging
 
       if results.nil?
         <<-RESULTS
@@ -133,7 +138,7 @@ class KineticRequestCeSubmissionRetrieveByQueryV1
     end
 
     rescue RestClient::Exception => error
-      raise StandardError, error
+      raise StandardError, error.inspect
   end
 
   

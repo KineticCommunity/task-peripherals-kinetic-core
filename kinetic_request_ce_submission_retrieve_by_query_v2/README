@@ -10,7 +10,7 @@ Searches a form's submissions and returns the submission details.
 [Form Slug]
   The slug of the Form that is being searched.
 [Query]
-  The query that will be used to search the submissions. Ex: values[company]=Kinetic
+  The query that will be used to search the submissions. Ex: values[company]="Kinetic" AND values[department]="Support"
 
 === Results
 
@@ -49,7 +49,6 @@ Searches a form's submissions and returns the submission details.
 [formStatus]
    Form Status
 
-	   
 == Details
 
 Returns information about the submission found by the query given plus limit=1. 
@@ -57,9 +56,5 @@ Note that the query should be specific enough to bring back just one value. If i
 is not, one will be selected by the system because of the limit=1 added onto the 
 search. The first one returned will be returned by the handler.
 
-Note that the query must be URI escaped. This can be done by using 
-URI.escape in the parameter. For example:
-<%=URI.escape("values[Notification Name]")%>=<%=URI.escape(@inputs['Email Template Name'])%>&value[Type]=Recipient
-In this example, the first field name must be escaped because of the space, and the variable should 
-because it is unknown what characters that may contain. We *don't* want to escape the & because we want that
-to act like a & on the URL and then the rest of the field and values don't contain anything we need to escape.
+
+
